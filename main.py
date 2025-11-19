@@ -5,6 +5,12 @@ import time
 DIGITS = 4  # change this to 5, 6, etc.
 
 # ------------------------------
+# GLOBAL STATS
+# ------------------------------
+win_count = 0
+times = []
+
+# ------------------------------
 # defs
 # ------------------------------
 
@@ -51,6 +57,8 @@ def get_bulls_and_cows(secret, guess):
 
 # One game
 def play_game():
+    global win_count, times
+
     print(f'''Hi there!
 -----------------------------------------------
 I've generated a random {DIGITS}-digit number for you.
@@ -80,9 +88,27 @@ Enter a number
             total = end_time - start_time
             minutes = int(total // 60)
             seconds = int(total % 60)
-            print(f"Total time: {minutes:02d}:{seconds:02d}")
+
+            # update statistics
+            win_count += 1
+            times.append(total)
+
+            # calculate average time
+            avg = sum(times) / len(times)
+            avg_min = int(avg // 60)
+            avg_sec = int(avg % 60)
+
+            print("-----------------------------------------------")
             print("Congrats, you found out the number:", secret)
             print("Attempts:", attempts)
+            print(f"Total time: {minutes:02d}:{seconds:02d}")
+            print("-----------------------------------------------")
+
+            print("Game statistics:")
+            print("Total wins:", win_count)
+            print(f"Average time: {avg_min:02d}:{avg_sec:02d}")
+            print("-----------------------------------------------")
+
             break
 
 # ------------------------------
@@ -93,5 +119,5 @@ while True:
     play_game()
     again = input("Wanna play again? (y/n): ").lower()
     if again != "y":
-        print("Thanks for playing! Byyyyyee!")
+        print("\nThanks for playing! Byyyyyee!")
         break
