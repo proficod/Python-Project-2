@@ -1,12 +1,18 @@
 import random
 import time
 
+# How many digits should the secret number have
+DIGITS = 4  # change this to 5, 6, etc.
+
+# ------------------------------
 # defs
+# ------------------------------
+
 # Random secret number
 def make_secret():
     secret = ""
     digits = "0123456789"
-    while len(secret) < 4:
+    while len(secret) < DIGITS:
         d = random.choice(digits)
         if len(secret) == 0 and d == "0":
             continue
@@ -16,13 +22,13 @@ def make_secret():
 
 # Check if all rules are followed
 def check_input(guess):
-    if len(guess) != 4:
-        print("Enter exactly 4 digits\n")
+    if len(guess) != DIGITS:
+        print(f"Enter exactly {DIGITS} digits\n")
         return False
     if not guess.isdigit():
         print("Enter only numbers.\n")
         return False
-    if len(set(guess)) != 4:
+    if len(set(guess)) != DIGITS:
         print("Each number should appear only once.\n")
         return False
     if guess[0] == "0":
@@ -35,7 +41,7 @@ def get_bulls_and_cows(secret, guess):
     bulls = 0
     cows = 0
 
-    for i in range(4):
+    for i in range(DIGITS):
         if guess[i] == secret[i]:
             bulls += 1
         elif guess[i] in secret:
@@ -43,14 +49,14 @@ def get_bulls_and_cows(secret, guess):
 
     return bulls, cows
 
-# Одна игра
+# One game
 def play_game():
-    print('''Hi there!
+    print(f'''Hi there!
 -----------------------------------------------
-I've generated a random 4 digit number for you.
+I've generated a random {DIGITS}-digit number for you.
 Let's play a bulls and cows game.
 -----------------------------------------------
-Enter a number:
+Enter a number
 -----------------------------------------------''')
     
     secret = make_secret()
@@ -67,14 +73,16 @@ Enter a number:
         attempts += 1
         bulls, cows = get_bulls_and_cows(secret, guess)
 
-        print("Bulls", bulls, "| Cows:", cows, "\n")
+        print("Bulls:", bulls, "| Cows:", cows, "\n")
 
-        if bulls == 4:
+        if bulls == DIGITS:
             end_time = time.time()
             total = end_time - start_time
+            minutes = int(total // 60)
+            seconds = int(total % 60)
+            print(f"Total time: {minutes:02d}:{seconds:02d}")
             print("Congrats, you found out the number:", secret)
             print("Attempts:", attempts)
-            print("Total time:", round(total, 1), "seconds\n")
             break
 
 # ------------------------------
